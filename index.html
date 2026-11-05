@@ -298,33 +298,33 @@
     </div>
 
     <script>
-        // Sample Initial Data
+        // Sample Initial Data - Starting clean without fixed sample images
         let inventory = JSON.parse(localStorage.getItem('tic_inventory_data')) || [
             {
                 id: '1',
-                code: 'TIC-2026-LAP-001',
-                type: 'Laptop',
-                model: 'Dell Latitude 5420',
-                serial: '8X912Z3',
-                location: 'Oficina 302 - Contabilidad',
-                user: 'Carlos Mendoza',
+                code: 'TIC-2026-MON-001',
+                type: 'Monitor',
+                model: 'Dell 24 Inches P2419H',
+                serial: 'CN-0X912Z3',
+                location: 'Dirección del Centro',
+                user: 'Dirección',
                 status: 'Operativo',
-                specs: 'Intel i7, 16GB RAM, 512GB SSD',
-                photo1: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=500&auto=format&fit=crop&q=60',
-                photo2: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=500&auto=format&fit=crop&q=60'
+                specs: 'Full HD, HDMI/VGA',
+                photo1: '',
+                photo2: ''
             },
             {
                 id: '2',
-                code: 'TIC-2026-PRN-002',
-                type: 'Impresora',
-                model: 'Epson EcoTank L3250',
-                serial: 'EP-902110',
-                location: 'Área Común 2do Piso',
-                user: 'Uso Compartido',
-                status: 'En Mantención',
-                specs: 'Multifuncional Tinta Continua WiFi',
-                photo1: 'https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?w=500&auto=format&fit=crop&q=60',
-                photo2: 'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=500&auto=format&fit=crop&q=60'
+                code: 'TIC-2026-NVR-001',
+                type: 'Servidor',
+                model: 'Hikvision NVR 16 Ch',
+                serial: 'HK-902110',
+                location: 'Cuarto de Red / Servidores',
+                user: 'Dinamizador TIC',
+                status: 'Operativo',
+                specs: 'Grabador de Cámaras 4TB Storage',
+                photo1: '',
+                photo2: ''
             }
         ];
 
@@ -362,6 +362,7 @@
 
             items.forEach(item => {
                 const statusColor = getStatusBadgeClass(item.status);
+                const displayPhoto1 = item.photo1 || 'https://placehold.co/400x250/e2e8f0/64748b?text=Sin+Foto+Equipo';
 
                 const card = document.createElement('div');
                 card.className = 'bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition flex flex-col justify-between';
@@ -369,7 +370,7 @@
                     <div>
                         <!-- Image Header -->
                         <div class="relative h-44 bg-slate-100 overflow-hidden group">
-                            <img src="${item.photo1 || 'https://placehold.co/400x250/e2e8f0/64748b?text=Sin+Imagen'}" 
+                            <img src="${displayPhoto1}" 
                                  alt="${item.model}" 
                                  class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                             <span class="absolute top-3 left-3 px-2.5 py-1 text-xs font-bold rounded-full shadow ${statusColor}">
@@ -503,11 +504,11 @@
             const prev2 = document.getElementById('preview-2');
 
             let photo1Url = prev1.classList.contains('hidden') || !prev1.src || prev1.src === window.location.href
-                ? 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=500&auto=format&fit=crop&q=60'
+                ? ''
                 : prev1.src;
 
             let photo2Url = prev2.classList.contains('hidden') || !prev2.src || prev2.src === window.location.href
-                ? 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=500&auto=format&fit=crop&q=60'
+                ? ''
                 : prev2.src;
 
             const itemData = {
@@ -556,8 +557,8 @@
             document.getElementById('detail-serial').innerText = item.serial || 'Sin Especificar';
             document.getElementById('detail-location').innerText = item.location;
             document.getElementById('detail-user').innerText = item.user || 'Sin asignar';
-            document.getElementById('detail-img-1').src = item.photo1;
-            document.getElementById('detail-img-2').src = item.photo2;
+            document.getElementById('detail-img-1').src = item.photo1 || 'https://placehold.co/400x250/e2e8f0/64748b?text=Sin+Foto+General';
+            document.getElementById('detail-img-2').src = item.photo2 || 'https://placehold.co/400x250/e2e8f0/64748b?text=Sin+Foto+Etiqueta';
             document.getElementById('qr-code-text').innerText = item.code;
 
             const badge = document.getElementById('detail-badge-status');
@@ -601,11 +602,20 @@
                 document.getElementById('preview-1').src = item.photo1;
                 document.getElementById('preview-1').classList.remove('hidden');
                 document.getElementById('placeholder-1').classList.add('hidden');
+            } else {
+                document.getElementById('preview-1').src = '';
+                document.getElementById('preview-1').classList.add('hidden');
+                document.getElementById('placeholder-1').classList.remove('hidden');
             }
+
             if (item.photo2) {
                 document.getElementById('preview-2').src = item.photo2;
                 document.getElementById('preview-2').classList.remove('hidden');
                 document.getElementById('placeholder-2').classList.add('hidden');
+            } else {
+                document.getElementById('preview-2').src = '';
+                document.getElementById('preview-2').classList.add('hidden');
+                document.getElementById('placeholder-2').classList.remove('hidden');
             }
 
             document.getElementById('modal-title').innerText = 'Editar Equipo TIC';
